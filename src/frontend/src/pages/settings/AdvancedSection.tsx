@@ -277,6 +277,12 @@ function TierCard() {
   // Derive active download status from progress data
   const hasActiveDownload = hasActiveDownloadEntry(downloadProgress);
   const isDownloading = hasActiveDownload || startDownload.isPending;
+  // One download at a time: every Download button is disabled while any tier downloads (isDownloading), but only the tier that
+  // is downloading, or that was just pressed, shows the spinner.
+  const isRowDownloading = (tier: string) => {
+    const status = downloadProgress?.[tier]?.status;
+    return status === 'pending' || status === 'downloading' || (startDownload.isPending && startDownload.variables === tier);
+  };
 
   // When a download transitions to completed, refresh tier list and settings
   const prevProgressRef = useRef<typeof downloadProgress>(undefined);
@@ -370,7 +376,7 @@ function TierCard() {
                     onClick={() => handleStartDownload(tier.tier)}
                     disabled={isDownloading}
                   >
-                    {isDownloading ? (
+                    {isRowDownloading(tier.tier) ? (
                       <Loader2 className="w-3 h-3 motion-safe:animate-spin" />
                     ) : (
                       <Download className="w-3 h-3" />
@@ -422,7 +428,7 @@ function TierCard() {
                 <div className="flex items-center justify-between mb-0.5">
                   <p className="text-sm leading-none font-bold text-ink capitalize flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 motion-safe:animate-spin text-accent" />
-                    Downloading {progressTier}…
+                    Downloading {tierDescriptions[progressTier]?.label ?? progressTier}…
                   </p>
                   <p className="text-xs leading-none font-bold text-accent">{label}</p>
                 </div>

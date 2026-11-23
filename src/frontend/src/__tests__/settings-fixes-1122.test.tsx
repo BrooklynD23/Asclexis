@@ -12,7 +12,7 @@
  * HC-UISET-019 tests in ui-settings.test.tsx are the other half of the download rules and are not edited.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -32,6 +32,7 @@ vi.mock('@/services/api', async (importOriginal) => {
   };
 });
 
+const GB = 1_073_741_824;
 const SETTINGS = '/settings/model';
 const TIERS = '/settings/model/tiers';
 const PROGRESS = '/settings/model/download-progress';
@@ -69,6 +70,10 @@ const tiers = {
     tierRow('gemma4-e2b', 'Template Mode', false, true),
   ],
 };
+
+const entry = (tier: string, status: string, progress: number) => ({
+  tier, status, progress, downloaded_bytes: progress * GB, total_bytes: GB, path: null, error: null,
+});
 
 let downloadProgress: Record<string, unknown> = {};
 let settingsGet: () => unknown = () => modelSettings;
@@ -183,5 +188,65 @@ describe('SETTINGS-OCR-429: a failed refetch keeps the panel, and an OCR toggle 
     expect(getCalls(SETTINGS)).toBe(before.settings);
     expect(getCalls(TIERS)).toBe(before.tiers);
     expect(getCalls(EXTERNAL)).toBe(before.external);
+  });
+});
+
+describe('SETTINGS-TIER-SPINNER: only the tier that is downloading spins, and the bar names it', () => {
+  const downloadButton = (tier: string) => within(screen.getByTestId(`tier-row-${tier}`)).getByRole('button', { name: 'Download' });
+  const spinner = (tier: string) => downloadButton(tier).querySelector('[class*="animate-spin"]');
+
+  it('HC-SETFIX-010: with mid downloading, only the mid row spins; every Download button is disabled', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.4) };
+    const { user } = renderAdvanced();
+    await openAdvanced(user);
+    await screen.findByText('40%');
+
+    expect(spinner('mid')).not.toBeNull();
+    expect(spinner('high')).toBeNull();
+    expect(spinner('gemma4-e2b')).toBeNull();
+    for (const tier of ['mid', 'high', 'gemma4-e2b']) expect(downloadButton(tier), tier).toBeDisabled();
+  });
+
+  it('HC-SETFIX-011: the rows that do not spin keep the stillness classes and the T0 word (G10)', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.4) };
+    const { user } = renderAdvanced();
+    await openAdvanced(user);
+    await screen.findByText('40%');
+
+    for (const tier of ['mid', 'high', 'gemma4-e2b']) {
+      const button = downloadButton(tier);
+      expect(button.className, tier).toContain('disabled:opacity-100');
+      expect(button.className, tier).not.toMatch(/disabled:text-/);
+      expect(button.className, tier).toContain('active:scale-100');
+      expect(button.querySelector('[data-t0]'), tier).toHaveTextContent('Download');
+    }
+  });
+
+  it('HC-SETFIX-012: the bar names the model by its label, and falls back to the key for a tier without one', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.4) };
+    const { user, client } = renderAdvanced();
+    await openAdvanced(user);
+    expect(await screen.findByText('Downloading Mid (Phi-4-mini)…')).toBeInTheDocument();
+    expect(screen.queryByText('Downloading mid…')).not.toBeInTheDocument();
+
+    downloadProgress = { 'gemma4-e2b': entry('gemma4-e2b', 'downloading', 0.2) };
+    await act(async () => {
+      await client.invalidateQueries({ queryKey: ['model-settings', 'download-progress'] });
+    });
+    expect(await screen.findByText('Downloading gemma4-e2b…')).toBeInTheDocument();
+  });
+
+  it('HC-SETFIX-013: between the press and the first progress answer, only the pressed row spins and every row is disabled', async () => {
+    let release: (value: unknown) => void = () => {};
+    vi.mocked(api.apiPost).mockImplementation(() => new Promise((resolve) => { release = resolve; }) as never);
+    const { user } = renderAdvanced();
+    await openAdvanced(user);
+
+    await user.click(downloadButton('gemma4-e2b'));
+    await waitFor(() => expect(spinner('gemma4-e2b')).not.toBeNull());
+    expect(spinner('mid')).toBeNull();
+    expect(spinner('high')).toBeNull();
+    for (const tier of ['mid', 'high', 'gemma4-e2b']) expect(downloadButton(tier), tier).toBeDisabled();
+    await act(async () => { release({}); });
   });
 });
