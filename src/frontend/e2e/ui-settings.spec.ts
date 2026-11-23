@@ -274,7 +274,7 @@ test.describe('HC-UISET-024: advanced height at 1440 with a download running', (
     await download.scrollIntoViewIfNeeded();
     await download.click();
     // The running state: the block's title and its bytes line are on screen (the block has finished growing in).
-    await expect(page.getByText('Downloading mid…')).toBeVisible();
+    await expect(page.getByText('Downloading Mid (Phi-4-mini)…')).toBeVisible();
     await expect(page.getByText(/0\.93 GB \/ 2\.79 GB/)).toBeVisible();
     // The block's height and its bar animate in (0.5 s); wait them out so the figure is the settled one.
     await page.waitForTimeout(1000);
