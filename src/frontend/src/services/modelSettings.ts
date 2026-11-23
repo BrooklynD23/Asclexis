@@ -9,7 +9,8 @@
  * Phase 4B: Settings page integration.
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRef } from 'react';
+import { useQuery, useMutation, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { apiGet, apiPost, apiPut, apiPatch } from './api';
 
 // Types
@@ -184,15 +185,48 @@ export function useTiers() {
   });
 }
 
+function hasActiveDownload(progress: Record<string, DownloadProgress> | undefined): boolean {
+  return Object.values(progress ?? {}).some((p) => p.status === 'pending' || p.status === 'downloading');
+}
+
+// A tier the server reports as `failed` right after it was downloading may still complete: a second task can share its key
+// (a second window's POST), and the server answers failed, then completed (HC-UISET-019). The poll goes on this long after
+// the last active answer when the newest answer holds a failed tier, so the page still sees the completion.
+const FAILED_GRACE_MS = 10_000;
+
+// After a Download press the poll goes on for this long even if no answer shows the download yet: the one read after the POST
+// can fail (a 429), and an idle answer must not end the poll of a download the server has started. Per client, like the cache.
+const PRESS_POLL_MS = 30_000;
+const pressedAt = new WeakMap<QueryClient, number>();
+
 /**
- * Query hook for download progress (polls while downloading).
+ * Query hook for download progress. It polls every 2 s only while an answer says a download is pending or downloading (and
+ * for FAILED_GRACE_MS after one, if a tier is reported failed, and for PRESS_POLL_MS after a Download press), and stops when
+ * none is: polling forever was about 30
+ * requests a minute from one address against the per-IP limit. A download that starts while nobody is polling is picked up
+ * by a read on every mount (the app keeps answers fresh for 5 minutes, which would otherwise keep an idle one) and by the
+ * read useStartDownload asks for after its POST.
  */
 export function useDownloadProgress(enabled: boolean = false) {
+  const queryClient = useQueryClient();
+  const lastActiveAt = useRef(Number.NEGATIVE_INFINITY);
   return useQuery({
     queryKey: [QUERY_KEY, 'download-progress'],
     queryFn: getDownloadProgress,
     enabled,
-    refetchInterval: enabled ? 2000 : false,
+    refetchOnMount: 'always',
+    // A download started in another tab shows when the user comes back to this one (answers stay fresh for 5 minutes).
+    refetchOnWindowFocus: 'always',
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      if (hasActiveDownload(data)) {
+        lastActiveAt.current = Date.now();
+        return 2000;
+      }
+      if (Date.now() - (pressedAt.get(queryClient) ?? Number.NEGATIVE_INFINITY) < PRESS_POLL_MS) return 2000;
+      const failed = Object.values(data ?? {}).some((p) => p.status === 'failed');
+      return failed && Date.now() - lastActiveAt.current < FAILED_GRACE_MS ? 2000 : false;
+    },
   });
 }
 
@@ -204,7 +238,13 @@ export function useStartDownload() {
 
   return useMutation({
     mutationFn: (tier: string) => startDownload(tier),
-    onSuccess: () => {
+    onSuccess: (response, tier) => {
+      pressedAt.set(queryClient, Date.now());
+      // The POST answer is the tier's first progress entry. Kept in the cache, it holds every Download disabled and the poll on
+      // if the read that follows fails (a 429) and would otherwise leave an idle answer, and a second press.
+      if (response?.status) {
+        queryClient.setQueryData<Record<string, DownloadProgress>>([QUERY_KEY, 'download-progress'], (old) => ({ ...old, [tier]: response }));
+      }
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY, 'download-progress'] });
     },
   });
@@ -428,8 +468,12 @@ export function useSaveOcrPreference() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: saveOcrPreference,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+    onSuccess: (response) => {
+      // The PATCH answer carries the three OCR fields, so they are written into the settings in the cache. Invalidating the
+      // whole key asked for the settings, the tiers, the download progress, the external API and the diagnostics again, about
+      // six reads per toggle from one address, and the per-IP limiter answered 429 after a few toggles. Only the diagnostics
+      // list depends on the OCR state and is read again.
+      queryClient.setQueryData<ModelSettings>([QUERY_KEY], (old) => (old ? { ...old, ...response } : old));
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY, 'diagnostics'] });
     },
   });

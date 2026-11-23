@@ -193,7 +193,9 @@ function AdvancedPanels({ exportResult, onExportResult }: AdvancedSectionProps) 
   // opening Advanced is a burst of replies, and one
   // render of the whole panel per reply would add a task to that burst for each of them (G10, stillness; the readings
   // found a burst of tasks under 50 ms at dev x1, not one long task).
-  const { isLoading: settingsLoading, isError } = useModelSettings();
+  // A refetch that fails (a 429 from the per-IP limiter, a dropped request) sets isError while the last good answer is still in
+  // the cache; the panel keeps that answer and only a read that has never succeeded shows the error.
+  const { isLoading: settingsLoading, isError, data: settingsData } = useModelSettings();
   const { isLoading: tiersLoading } = useTiers();
   // Waited on once. A tiers request that failed is asked again when the tier card mounts (react-query retries an errored
   // query on mount) and reads as loading again: waiting on that would unmount the card, which asks again, in a loop.
@@ -217,7 +219,7 @@ function AdvancedPanels({ exportResult, onExportResult }: AdvancedSectionProps) 
     );
   }
 
-  if (isError) {
+  if (isError && !settingsData) {
     return (
       <div className="flex items-center justify-center py-24 text-status-attention">
         <AlertCircle className="w-6 h-6 mr-2" />
@@ -228,6 +230,13 @@ function AdvancedPanels({ exportResult, onExportResult }: AdvancedSectionProps) 
 
   return (
     <>
+      {/* A refetch that failed leaves the last answer on screen; this says so. The region is in the first render of the panels
+          and empty until then (no height, no margin), so its text is announced and nothing moves when there is none. */}
+      <div role="status" data-testid="advanced-refresh-note">
+        {isError && settingsData ? (
+          <p className="pb-3 text-xs text-ink-secondary">Couldn&apos;t refresh settings. Showing the last saved values.</p>
+        ) : null}
+      </div>
       {/* Three columns from xl (1280 px), two from lg, one below. The tiers sit alone in the first column and nothing
           above or beside them changes height when data arrives (G10); the diagnostics list, whose height does change,
           sits in the last column. Expanded at 1440, the page is 1796 px by default and 1839 px with a download running (the
@@ -275,6 +284,12 @@ function TierCard() {
   // Derive active download status from progress data
   const hasActiveDownload = hasActiveDownloadEntry(downloadProgress);
   const isDownloading = hasActiveDownload || startDownload.isPending;
+  // One download at a time: every Download button is disabled while any tier downloads (isDownloading), but only the tier that
+  // is downloading, or that was just pressed, shows the spinner.
+  const isRowDownloading = (tier: string) => {
+    const status = downloadProgress?.[tier]?.status;
+    return status === 'pending' || status === 'downloading' || (startDownload.isPending && startDownload.variables === tier);
+  };
 
   // When a download transitions to completed, refresh tier list and settings
   const prevProgressRef = useRef<typeof downloadProgress>(undefined);
@@ -368,7 +383,7 @@ function TierCard() {
                     onClick={() => handleStartDownload(tier.tier)}
                     disabled={isDownloading}
                   >
-                    {isDownloading ? (
+                    {isRowDownloading(tier.tier) ? (
                       <Loader2 className="w-3 h-3 motion-safe:animate-spin" />
                     ) : (
                       <Download className="w-3 h-3" />
@@ -420,7 +435,7 @@ function TierCard() {
                 <div className="flex items-center justify-between mb-0.5">
                   <p className="text-sm leading-none font-bold text-ink capitalize flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 motion-safe:animate-spin text-accent" />
-                    Downloading {progressTier}…
+                    Downloading {tierDescriptions[progressTier]?.label ?? progressTier}…
                   </p>
                   <p className="text-xs leading-none font-bold text-accent">{label}</p>
                 </div>
