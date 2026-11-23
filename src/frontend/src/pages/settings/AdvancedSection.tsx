@@ -193,7 +193,9 @@ function AdvancedPanels({ exportResult, onExportResult }: AdvancedSectionProps) 
   // opening Advanced is a burst of replies, and one
   // render of the whole panel per reply would add a task to that burst for each of them (G10, stillness; the readings
   // found a burst of tasks under 50 ms at dev x1, not one long task).
-  const { isLoading: settingsLoading, isError } = useModelSettings();
+  // A refetch that fails (a 429 from the per-IP limiter, a dropped request) sets isError while the last good answer is still in
+  // the cache; the panel keeps that answer and only a read that has never succeeded shows the error.
+  const { isLoading: settingsLoading, isError, data: settingsData } = useModelSettings();
   const { isLoading: tiersLoading } = useTiers();
   // Waited on once. A tiers request that failed is asked again when the tier card mounts (react-query retries an errored
   // query on mount) and reads as loading again: waiting on that would unmount the card, which asks again, in a loop.
@@ -217,7 +219,7 @@ function AdvancedPanels({ exportResult, onExportResult }: AdvancedSectionProps) 
     );
   }
 
-  if (isError) {
+  if (isError && !settingsData) {
     return (
       <div className="flex items-center justify-center py-24 text-status-attention">
         <AlertCircle className="w-6 h-6 mr-2" />

@@ -428,8 +428,12 @@ export function useSaveOcrPreference() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: saveOcrPreference,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEY] });
+    onSuccess: (response) => {
+      // The PATCH answer carries the three OCR fields, so they are written into the settings in the cache. Invalidating the
+      // whole key asked for the settings, the tiers, the download progress, the external API and the diagnostics again, about
+      // six reads per toggle from one address, and the per-IP limiter answered 429 after a few toggles. Only the diagnostics
+      // list depends on the OCR state and is read again.
+      queryClient.setQueryData<ModelSettings>([QUERY_KEY], (old) => (old ? { ...old, ...response } : old));
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY, 'diagnostics'] });
     },
   });
