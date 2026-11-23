@@ -9,6 +9,7 @@
  * Phase 4B: Settings page integration.
  */
 
+import { useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiGet, apiPost, apiPut, apiPatch } from './api';
 
@@ -184,15 +185,38 @@ export function useTiers() {
   });
 }
 
+function hasActiveDownload(progress: Record<string, DownloadProgress> | undefined): boolean {
+  return Object.values(progress ?? {}).some((p) => p.status === 'pending' || p.status === 'downloading');
+}
+
+// A tier the server reports as `failed` right after it was downloading may still complete: a second task can share its key
+// (a second window's POST), and the server answers failed, then completed (HC-UISET-019). The poll goes on this long after
+// the last active answer when the newest answer holds a failed tier, so the page still sees the completion.
+const FAILED_GRACE_MS = 10_000;
+
 /**
- * Query hook for download progress (polls while downloading).
+ * Query hook for download progress. It polls every 2 s only while an answer says a download is pending or downloading (and
+ * for FAILED_GRACE_MS after one, if a tier is reported failed), and stops when none is: polling forever was about 30
+ * requests a minute from one address against the per-IP limit. A download that starts while nobody is polling is picked up
+ * by a read on every mount (the app keeps answers fresh for 5 minutes, which would otherwise keep an idle one) and by the
+ * read useStartDownload asks for after its POST.
  */
 export function useDownloadProgress(enabled: boolean = false) {
+  const lastActiveAt = useRef(Number.NEGATIVE_INFINITY);
   return useQuery({
     queryKey: [QUERY_KEY, 'download-progress'],
     queryFn: getDownloadProgress,
     enabled,
-    refetchInterval: enabled ? 2000 : false,
+    refetchOnMount: 'always',
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      if (hasActiveDownload(data)) {
+        lastActiveAt.current = Date.now();
+        return 2000;
+      }
+      const failed = Object.values(data ?? {}).some((p) => p.status === 'failed');
+      return failed && Date.now() - lastActiveAt.current < FAILED_GRACE_MS ? 2000 : false;
+    },
   });
 }
 

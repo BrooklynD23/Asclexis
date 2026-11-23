@@ -12,11 +12,13 @@
  * HC-UISET-019 tests in ui-settings.test.tsx are the other half of the download rules and are not edited.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import { act, render, renderHook, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { ReactNode } from 'react';
 import { AdvancedSection } from '@/pages/settings/AdvancedSection';
+import { useDownloadProgress, useStartDownload } from '@/services/modelSettings';
 import { useAuthStore } from '@/stores/authStore';
 import * as api from '@/services/api';
 
@@ -248,5 +250,101 @@ describe('SETTINGS-TIER-SPINNER: only the tier that is downloading spins, and th
     expect(spinner('high')).toBeNull();
     for (const tier of ['mid', 'high', 'gemma4-e2b']) expect(downloadButton(tier), tier).toBeDisabled();
     await act(async () => { release({}); });
+  });
+});
+
+describe('SETTINGS-POLL-IDLE: the download progress is polled only while a download is active', () => {
+  // The hooks alone, on fake timers: 2 s is the poll interval, so 10 s is five polls if it never stops. The client is the
+  // app's (a read stays fresh for 5 minutes), because that is what a return to Advanced meets.
+  const wrap = (client: QueryClient) => ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  );
+  const useProgressAndStart = () => ({ progress: useDownloadProgress(true), start: useStartDownload() });
+  const advance = (ms: number) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('HC-SETFIX-020: with no download running it reads once and then does not poll', async () => {
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(1);
+    await advance(10_000);
+    expect(getCalls(PROGRESS)).toBe(1);
+  });
+
+  it('HC-SETFIX-021: while a download runs it polls every 2 s', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.2) };
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(1);
+    await advance(6_000);
+    expect(getCalls(PROGRESS)).toBe(4);
+  });
+
+  it('HC-SETFIX-022: a Download press while idle reads the progress once and then polls', async () => {
+    const { result } = renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(10_000);
+    expect(getCalls(PROGRESS)).toBe(1);
+
+    downloadProgress = { mid: entry('mid', 'downloading', 0.1) };
+    await act(async () => { await result.current.start.mutateAsync('mid'); });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(2);
+    await advance(6_000);
+    expect(getCalls(PROGRESS)).toBe(5);
+  });
+
+  it('HC-SETFIX-023: the polling stops once the download completes', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.9) };
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    downloadProgress = { mid: entry('mid', 'completed', 1) };
+    await advance(2_000);
+    const atCompletion = getCalls(PROGRESS);
+    expect(atCompletion).toBe(2);
+    await advance(10_000);
+    expect(getCalls(PROGRESS)).toBe(atCompletion);
+  });
+
+  it('HC-SETFIX-024: a download started elsewhere while Advanced was closed is picked up on return, and then polled', async () => {
+    const client = makeClient();
+    const first = renderHook(useProgressAndStart, { wrapper: wrap(client) });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(1);
+    first.unmount();
+
+    // Another window starts a download. The cached answer (idle) is younger than the client's 5 minutes.
+    downloadProgress = { mid: entry('mid', 'downloading', 0.3) };
+    await advance(30_000);
+    renderHook(useProgressAndStart, { wrapper: wrap(client) });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(2);
+    await advance(4_000);
+    expect(getCalls(PROGRESS)).toBe(4);
+  });
+
+  // HC-UISET-019 (ui-settings.test.tsx, not edited) is the page-level case: downloading, failed, completed.
+  it('HC-SETFIX-025: a failed answer right after a running download is followed for a while, then dropped; a failed answer alone is not polled', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.6) };
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    downloadProgress = { mid: { ...entry('mid', 'failed', 0), error: 'The download stopped before it finished. Try again.' } };
+    await advance(2_000);
+    expect(getCalls(PROGRESS)).toBe(2);
+    downloadProgress = { mid: entry('mid', 'completed', 1) };
+    await advance(2_000);
+    expect(getCalls(PROGRESS)).toBe(3);
+
+    // A failed answer that nothing running came before: one read, no polling.
+    vi.mocked(api.apiGet).mockClear();
+    downloadProgress = { mid: { ...entry('mid', 'failed', 0), error: 'The download stopped before it finished. Try again.' } };
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(10_000);
+    expect(getCalls(PROGRESS)).toBe(1);
   });
 });
