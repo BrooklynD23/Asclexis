@@ -15,7 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, render, renderHook, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { focusManager, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
 import { AdvancedSection } from '@/pages/settings/AdvancedSection';
 import { useDownloadProgress, useStartDownload } from '@/services/modelSettings';
@@ -79,12 +79,20 @@ const entry = (tier: string, status: string, progress: number) => ({
 
 let downloadProgress: Record<string, unknown> = {};
 let settingsGet: () => unknown = () => modelSettings;
+// The next N reads of the progress fail, as a 429 from the per-IP limiter does.
+let progressFailures = 0;
 let unmocked: string[] = [];
 
 const responses: Record<string, () => unknown> = {
   [SETTINGS]: () => settingsGet(),
   [TIERS]: () => tiers,
-  [PROGRESS]: () => downloadProgress,
+  [PROGRESS]: () => {
+    if (progressFailures > 0) {
+      progressFailures -= 1;
+      throw new Error('Rate limit exceeded');
+    }
+    return downloadProgress;
+  },
   [EXTERNAL]: () => ({ use_external_api: false, provider: '', model: '', api_key_configured: false, redaction_break_glass: false }),
   [DIAGNOSTICS]: () => ({ checked_at: '2026-11-22T08:00:00Z', components: [] }),
   '/feedback/stats': () => ({
@@ -128,6 +136,7 @@ beforeEach(() => {
   unmocked = [];
   downloadProgress = {};
   settingsGet = () => modelSettings;
+  progressFailures = 0;
   useAuthStore.setState({ profileId: 'p1' } as never);
   vi.mocked(api.apiGet).mockImplementation(async (path: string) => {
     const respond = responses[path];
@@ -193,6 +202,33 @@ describe('SETTINGS-OCR-429: a failed refetch keeps the panel, and an OCR toggle 
   });
 });
 
+describe('SETTINGS-OCR-429 (review F3): a failed refresh says so, in a status region that is there from the start', () => {
+  it('HC-SETFIX-004: the region is empty and silent until a refetch fails, then names it, and empties when a refetch succeeds', async () => {
+    const { client, user } = renderAdvanced();
+    await openAdvanced(user);
+    const note = screen.getByTestId('advanced-refresh-note');
+    expect(note).toHaveAttribute('role', 'status');
+    expect(note).toBeEmptyDOMElement();
+
+    settingsGet = () => {
+      throw new Error('Rate limit exceeded');
+    };
+    await act(async () => {
+      await client.refetchQueries({ queryKey: ['model-settings'], exact: true });
+    });
+    await waitFor(() => expect(note).toHaveTextContent("Couldn't refresh settings. Showing the last saved values."));
+    // The same element, not a new one: a live region that is added with its text is not announced.
+    expect(screen.getByTestId('advanced-refresh-note')).toBe(note);
+    expect(screen.getByTestId('tier-row-mid')).toBeInTheDocument();
+
+    settingsGet = () => modelSettings;
+    await act(async () => {
+      await client.refetchQueries({ queryKey: ['model-settings'], exact: true });
+    });
+    await waitFor(() => expect(note).toBeEmptyDOMElement());
+  });
+});
+
 describe('SETTINGS-TIER-SPINNER: only the tier that is downloading spins, and the bar names it', () => {
   const downloadButton = (tier: string) => within(screen.getByTestId(`tier-row-${tier}`)).getByRole('button', { name: 'Download' });
   const spinner = (tier: string) => downloadButton(tier).querySelector('[class*="animate-spin"]');
@@ -251,6 +287,28 @@ describe('SETTINGS-TIER-SPINNER: only the tier that is downloading spins, and th
     for (const tier of ['mid', 'high', 'gemma4-e2b']) expect(downloadButton(tier), tier).toBeDisabled();
     await act(async () => { release({}); });
   });
+});
+
+describe('SETTINGS-POLL-IDLE (review F1, page): a failed read right after a press keeps every Download disabled', () => {
+  it('HC-SETFIX-026: the POST answer is kept when the one progress read after it fails (429), the poll goes on, and no second press is possible', async () => {
+    vi.mocked(api.apiPost).mockResolvedValue(entry('mid', 'pending', 0) as never);
+    const { user } = renderAdvanced();
+    await openAdvanced(user);
+    const buttons = () => ['mid', 'high', 'gemma4-e2b'].map((tier) => within(screen.getByTestId(`tier-row-${tier}`)).getByRole('button', { name: 'Download' }));
+    const before = getCalls(PROGRESS);
+
+    progressFailures = 1;
+    downloadProgress = { mid: entry('mid', 'downloading', 0.4) };
+    await user.click(buttons()[0]);
+    await waitFor(() => expect(getCalls(PROGRESS)).toBe(before + 1));
+    await waitFor(() => expect(progressFailures).toBe(0));
+    // The read has failed; nothing says the download is not running.
+    for (const button of buttons()) expect(button).toBeDisabled();
+
+    // The next poll answers, and the bar shows.
+    expect(await screen.findByText('40%', {}, { timeout: 6000 })).toBeInTheDocument();
+    for (const button of buttons()) expect(button).toBeDisabled();
+  }, 15000);
 });
 
 describe('SETTINGS-POLL-IDLE: the download progress is polled only while a download is active', () => {
@@ -346,5 +404,63 @@ describe('SETTINGS-POLL-IDLE: the download progress is polled only while a downl
     renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
     await advance(10_000);
     expect(getCalls(PROGRESS)).toBe(1);
+  });
+
+  it('HC-SETFIX-027: a press whose one progress read fails (429) is followed for a while: the poll goes on and finds the download', async () => {
+    const { result } = renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(1);
+
+    progressFailures = 1;
+    downloadProgress = { mid: entry('mid', 'downloading', 0.1) };
+    await act(async () => { await result.current.start.mutateAsync('mid'); });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(2);
+    expect(result.current.progress.isError).toBe(true);
+    await advance(2_000);
+    expect(getCalls(PROGRESS)).toBe(3);
+    await advance(2_000);
+    expect(getCalls(PROGRESS)).toBe(4);
+    expect(result.current.progress.data).toEqual(downloadProgress);
+  });
+
+  it('HC-SETFIX-028: the poll that follows a press is bounded: with nothing running it stops after about 30 s', async () => {
+    const { result } = renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    await act(async () => { await result.current.start.mutateAsync('mid'); });
+    await advance(40_000);
+    const settled = getCalls(PROGRESS);
+    expect(settled).toBeGreaterThan(3);
+    await advance(20_000);
+    expect(getCalls(PROGRESS)).toBe(settled);
+  });
+
+  it('HC-SETFIX-029: a failed tier held for longer than the 10 s grace is no longer polled', async () => {
+    downloadProgress = { mid: entry('mid', 'downloading', 0.6) };
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    downloadProgress = { mid: { ...entry('mid', 'failed', 0), error: 'The download stopped before it finished. Try again.' } };
+    await advance(2_000);
+    expect(getCalls(PROGRESS)).toBe(2);
+    await advance(12_000);
+    const settled = getCalls(PROGRESS);
+    expect(settled).toBeGreaterThan(2);
+    await advance(20_000);
+    expect(getCalls(PROGRESS)).toBe(settled);
+  });
+
+  it('HC-SETFIX-030: a download started in another tab shows when the user comes back to this one (window focus reads again)', async () => {
+    renderHook(useProgressAndStart, { wrapper: wrap(makeClient()) });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(1);
+
+    downloadProgress = { mid: entry('mid', 'downloading', 0.3) };
+    await act(async () => {
+      focusManager.setFocused(false);
+      focusManager.setFocused(true);
+    });
+    await advance(0);
+    expect(getCalls(PROGRESS)).toBe(2);
+    await act(async () => { focusManager.setFocused(undefined); });
   });
 });

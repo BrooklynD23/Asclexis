@@ -230,6 +230,13 @@ function AdvancedPanels({ exportResult, onExportResult }: AdvancedSectionProps) 
 
   return (
     <>
+      {/* A refetch that failed leaves the last answer on screen; this says so. The region is in the first render of the panels
+          and empty until then (no height, no margin), so its text is announced and nothing moves when there is none. */}
+      <div role="status" data-testid="advanced-refresh-note">
+        {isError && settingsData ? (
+          <p className="pb-3 text-xs text-ink-secondary">Couldn&apos;t refresh settings. Showing the last saved values.</p>
+        ) : null}
+      </div>
       {/* Three columns from xl (1280 px), two from lg, one below. The tiers sit alone in the first column and nothing
           above or beside them changes height when data arrives (G10); the diagnostics list, whose height does change,
           sits in the last column. Expanded at 1440, the page is 1796 px by default and 1839 px with a download running (the
