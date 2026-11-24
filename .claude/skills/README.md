@@ -6,6 +6,7 @@ Two upstreams, both MIT, both unmodified except for this file.
 |---|---|---|
 | [obra/superpowers](https://github.com/obra/superpowers) | `brainstorming`, `dispatching-parallel-agents`, `executing-plans`, `finishing-a-development-branch`, `receiving-code-review`, `requesting-code-review`, `subagent-driven-development`, `systematic-debugging`, `test-driven-development`, `using-git-worktrees`, `using-superpowers`, `verification-before-completion`, `writing-plans`, `writing-skills` | — |
 | [mattpocock/skills](https://github.com/mattpocock/skills) (`skills/engineering/`) | `ask-matt`, `code-review`, `codebase-design`, `diagnosing-bugs`, `domain-modeling`, `grill-with-docs`, `implement`, `improve-codebase-architecture`, `prototype`, `research`, `resolving-merge-conflicts`, `setup-matt-pocock-skills`, `tdd`, `to-spec`, `to-tickets`, `triage`, `wayfinder`, `wizard` | 2026-09-08, commit `3cca18b368ae95cdbdebbff572ccafa662551015` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) (`skills/productivity/`) | `grilling`, `grill-me` | 2026-11-24, commit `abeeaf95660ba9e8b7c753eb38f441ca707a8823` |
 
 Matt Pocock's license is preserved verbatim as `MATTPOCOCK-LICENSE`.
 Project **domain** skills live in [`skills/`](../../skills/README.md) (no dot) — see
