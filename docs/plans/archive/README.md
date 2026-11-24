@@ -30,8 +30,8 @@ Use this to resolve an old `~/hc-quiet-logs/...` reference to its archived copy.
 | `stillness-nav-late/RESULT.md` | [stillness-nav-late/RESULT.md](stillness-nav-late/RESULT.md) |
 | `stillness-nav-late-1107-result.md` | [stillness-nav-late-1107-result.md](stillness-nav-late-1107-result.md) |
 | `uig006-pass3/RESULT.md` | [uig006-pass3/RESULT.md](uig006-pass3/RESULT.md) |
-| `senior-report-doc/HANDOFF-SENIOR-REPORT-DOC.md` | [senior-report-doc/HANDOFF-SENIOR-REPORT-DOC.md](senior-report-doc/HANDOFF-SENIOR-REPORT-DOC.md) |
-| `senior-report-doc/STATUS.md` | [senior-report-doc/STATUS.md](senior-report-doc/STATUS.md) |
+| `senior-report-doc/HANDOFF-SENIOR-REPORT-DOC.md` | kept outside the repository since 2026-11-24 |
+| `senior-report-doc/STATUS.md` | kept outside the repository since 2026-11-24 |
 
 ## Not archived
 

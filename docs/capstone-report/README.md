@@ -1,6 +1,6 @@
 # Capstone Report Knowledge Base
 
-**Last Updated:** 2026-11-17 (Phase 1 senior report draft refreshed on `origin/main` @ `e979fb36` and kept as the repo snapshot, SENIOR-REPORT-P1); 2026-11-11 (Phase 1 senior report draft linked, SENIOR-REPORT-P1)
+**Last Updated:** 2026-11-24 (senior report drafts, outline, showcase plan and the CS4610_Report_Demo coursework moved outside the repository); 2026-11-17 (Phase 1 senior report draft refreshed on `origin/main` @ `e979fb36` and kept as the repo snapshot, SENIOR-REPORT-P1); 2026-11-11 (Phase 1 senior report draft linked, SENIOR-REPORT-P1)
 
 Knowledge base for the CS4610 capstone report. It tracks the distance between the project's original goal, the repository's verified state, and the claims the report makes. Everything here is evidence-linked. A claim without a `file:line`, commit hash, or command output is marked UNVERIFIED, not asserted.
 
@@ -17,8 +17,7 @@ Knowledge base for the CS4610 capstone report. It tracks the distance between th
 |---|---|
 | [00-original-goal.md](00-original-goal.md) | Product goal and research question, restated for the report, with the re-checked state beside the stated intent |
 | [claims-ledger.md](claims-ledger.md) | Every load-bearing claim ↔ repo evidence ↔ verdict. The anti-overclaim artifact. |
-| [report-outline.md](report-outline.md) | Capstone structure; each section mapped to the evidence that backs it |
-| [phase1/report-draft.md](phase1/report-draft.md) | Senior report Phase 1 draft (refreshed 2026-11-17; repo snapshot of the full report, which lives outside the repository): the whole project, building on the earlier reports; with [presentation outline](phase1/presentation-outline.md) and [evidence index](phase1/evidence-index.md) (claims, evidence gaps, lineage) |
+| Senior report drafts | The report outline, the Phase 1 draft, presentation outline and evidence index, and the showcase plan are kept outside the repository since 2026-11-24 |
 | [asclexis-showcase-2026-10-22.html](asclexis-showcase-2026-10-22.html) | Ledger-gated copy of the stakeholder showcase page: every claim element maps to a claims-ledger row, checked by a script. Supersedes the 2026-09-25 page, which stays unchanged in `audit/2026-09-25/`. |
 | [architecture-overview.md](architecture-overview.md) | Verified current architecture (process, data, document/assistant paths, model/network boundary, exports, jobs, migrations, CI) kept separate from proposed change; integration diagram; divergences from `docs/architecture/` |
 | [architecture-engineering-contract.md](architecture-engineering-contract.md) | Testable MUST / MUST NOT contracts, each classed `BINDING`, `PROPOSED` or `OWNER-GATED`, with enforcement, verification command, failure response and owner |
@@ -52,7 +51,6 @@ Proposed plans for the program's W-items, amendments and new findings. None is e
 | [W-11a](../plans/2026-09-27-W11a-test-and-gate-hardening.md) | Test and gate hardening (G-B1, G-B2, G-B4, G-B6) |
 | [W-11b](../plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md) | Roadmap items G-C1…G-C4 |
 | [Nightly doc-drift routine](../plans/2026-09-27-nightly-doc-drift-routine-spec.md) | Specification for a scheduled doc-drift check |
-| [Senior report showcase](../plans/2026-09-27-senior-report-showcase-plan.md) | CS4610 senior report stakeholder showcase update plan |
 
 ## Maintenance rules
 
@@ -61,7 +59,7 @@ Proposed plans for the program's W-items, amendments and new findings. None is e
 3. **Research verdicts need sources.** Every `research/` entry cites URLs or papers. A verdict without sources is an opinion and gets flagged. A vendor's own benchmark is labelled vendor-reported.
 4. **Current vs proposed.** Architecture, contract, matrix and program keep `implemented` / `wired` / `tested` / `proposed` / `owner-approved` / `owner-gated` / `unknown` distinct. An owner approval is cited to its record and never widened beyond its text.
 5. **Update `**Last Updated:**` on every edit** and keep this index current. `docs_lint` DOC-011 flags files nobody links.
-6. Corrections to submitted coursework (`CS4610_Report_Demo/*.docx`) live as scope notes in `CS4610_Report_Demo/README.md`, never as docx edits.
+6. Submitted coursework (`CS4610_Report_Demo/`) is kept outside the repository since 2026-11-24; its git history is unchanged.
 
 ## Open threads
 

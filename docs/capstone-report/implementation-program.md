@@ -447,7 +447,7 @@ Integrated from Wave-3a §5.5. Rows are **proposed** unless their Sign-off cell 
 | G-C4 | DOCS → OWNER | same | P1; *W-8* | S-C4-1…5 (S-C4-5 = EMB-REV) | decision record; no build | **done: PR #28** (2026-10-02); S-C4-1…5 unsigned |
 | G-C5 | PRODUCT | none yet | P8 Brief 5, P1 | HC-M11 flag-only (branch A §14 d2) | flag off ⇒ eval output byte-identical | owner |
 | RTN | OWNER (routine config; no repo edit) | [nightly doc-drift routine spec](../plans/2026-09-27-nightly-doc-drift-routine-spec.md) | P0-B + P0-B2 on `origin/main` (the cloud routine checks out `origin/main`); P1 for `harness_drift_check.py` | spec §9 confirmation (unsigned), incl. RTN Q6 (if the push probe shows the session can push; proposed default: do not enable) | routine not created until §9 is signed; read-only runs | owner (§9) |
-| SHOWCASE | DOCS + demo | [senior-report showcase plan](../plans/2026-09-27-senior-report-showcase-plan.md) | P0-B, P0-B2, P1; W-1 Task 6 before its Task 5 (per its own header) | not audited in Wave 3a/3b; P0-B2 must name it explicitly | per its own plan | owner |
+| SHOWCASE | DOCS + demo | senior-report showcase plan `2026-09-27-senior-report-showcase-plan.md` (kept outside the repository since 2026-11-24) | P0-B, P0-B2, P1; W-1 Task 6 before its Task 5 (per its own header) | not audited in Wave 3a/3b; P0-B2 must name it explicitly | per its own plan | owner |
 
 ## Program owner items (no plan owns them)
 

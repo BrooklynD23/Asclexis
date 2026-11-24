@@ -39,5 +39,5 @@ The same audit that validates the thesis also documents its failure modes: a fai
 ## Related
 
 - Claims register: [claims-ledger.md](claims-ledger.md)
-- Report structure: [report-outline.md](report-outline.md)
+- Report structure: `report-outline.md` (kept outside the repository since 2026-11-24)
 - Back to index: [README.md](README.md)

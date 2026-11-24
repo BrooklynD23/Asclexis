@@ -698,7 +698,7 @@ Links to: `docs/archive/plans/2026-07-07-rename-audit-and-shortlist.md`
 
 For the capstone report's introduction and evaluation sections. Two coupled goals — the product is the substrate; the research is the thesis.
 
-Links to: `docs/capstone-report/README.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/report-outline.md`, `docs/capstone-report/specs-compliance-matrix.md`
+Links to: `docs/capstone-report/README.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/specs-compliance-matrix.md`
 
 ## `docs/capstone-report/README.md`
 
@@ -706,7 +706,7 @@ Links to: `docs/capstone-report/README.md`, `docs/capstone-report/architecture-o
 
 Knowledge base for the CS4610 capstone report. It tracks the distance between the project's original goal, the repository's verified state, and the claims the report makes. Everything here is…
 
-Links to: `audit/2026-09-25/Devin-Audit-report.md`, `audit/2026-09-25/handoff-2026-09-27-execution.md`, `audit/2026-09-25/review/2026-09-27-followup.md`, `audit/2026-09-25/swarm-2026-09-27/ledger.md`, `docs/capstone-report/00-original-goal.md`, `docs/capstone-report/architecture-engineering-contract.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/asclexis-showcase-2026-10-22.html`, `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/fit-decoder-journey.md`, `docs/capstone-report/implementation-program.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/capstone-report/phase1/evidence-index.md`, `docs/capstone-report/phase1/presentation-outline.md`, `docs/capstone-report/phase1/report-draft.md`, `docs/capstone-report/report-outline.md`, `docs/capstone-report/research`, `docs/capstone-report/rsi-in-development-and-application.md`, `docs/capstone-report/specs-compliance-matrix.md`, `docs/plans/2026-09-27-P04-doc-drift-sweep-amendment.md`, `docs/plans/2026-09-27-P08-gated-packet-hipaa-aligned-amendment.md`, `docs/plans/2026-09-27-S01-sql-echo-phi-leak.md`, `docs/plans/2026-09-27-W01-harness-agents-branch-a.md`, `docs/plans/2026-09-27-W02-doctor-summary-redaction.md`, `docs/plans/2026-09-27-W03-verified-only-rag-and-trend-labels.md`, `docs/plans/2026-09-27-W04-legacy-abstain-and-eval-gate.md`, `docs/plans/2026-09-27-W05-citation-marker-prompt.md`, `docs/plans/2026-09-27-W06-external-runner-hardening.md`, `docs/plans/2026-09-27-W07-tiered-interpretation-via-modelrunner.md`, `docs/plans/2026-09-27-W08-bundled-embedding-model.md`, `docs/plans/2026-09-27-W10-governance-invariant-amendments.md`, `docs/plans/2026-09-27-W11a-test-and-gate-hardening.md`, `docs/plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md`, `docs/plans/2026-09-27-nightly-doc-drift-routine-spec.md`, `docs/plans/2026-09-27-senior-report-showcase-plan.md`
+Links to: `audit/2026-09-25/Devin-Audit-report.md`, `audit/2026-09-25/handoff-2026-09-27-execution.md`, `audit/2026-09-25/review/2026-09-27-followup.md`, `audit/2026-09-25/swarm-2026-09-27/ledger.md`, `docs/capstone-report/00-original-goal.md`, `docs/capstone-report/architecture-engineering-contract.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/asclexis-showcase-2026-10-22.html`, `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/fit-decoder-journey.md`, `docs/capstone-report/implementation-program.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/capstone-report/research`, `docs/capstone-report/rsi-in-development-and-application.md`, `docs/capstone-report/specs-compliance-matrix.md`, `docs/plans/2026-09-27-P04-doc-drift-sweep-amendment.md`, `docs/plans/2026-09-27-P08-gated-packet-hipaa-aligned-amendment.md`, `docs/plans/2026-09-27-S01-sql-echo-phi-leak.md`, `docs/plans/2026-09-27-W01-harness-agents-branch-a.md`, `docs/plans/2026-09-27-W02-doctor-summary-redaction.md`, `docs/plans/2026-09-27-W03-verified-only-rag-and-trend-labels.md`, `docs/plans/2026-09-27-W04-legacy-abstain-and-eval-gate.md`, `docs/plans/2026-09-27-W05-citation-marker-prompt.md`, `docs/plans/2026-09-27-W06-external-runner-hardening.md`, `docs/plans/2026-09-27-W07-tiered-interpretation-via-modelrunner.md`, `docs/plans/2026-09-27-W08-bundled-embedding-model.md`, `docs/plans/2026-09-27-W10-governance-invariant-amendments.md`, `docs/plans/2026-09-27-W11a-test-and-gate-hardening.md`, `docs/plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md`, `docs/plans/2026-09-27-nightly-doc-drift-routine-spec.md`
 
 ## `docs/capstone-report/architecture-engineering-contract.md`
 
@@ -746,7 +746,7 @@ Links to: `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/research/2
 
 This program orders the eight audit plans (`audit/2026-09-25/plans/01`–`08`) and the gaps found on 2026-09-27 that no plan covers. It includes the independent review's corrections (follow-up). The…
 
-Links to: `audit/2026-09-25/handoff-2026-09-28-execution-orchestrator.md`, `audit/2026-09-25/review/2026-09-27-followup.md`, `audit/2026-09-25/swarm-2026-09-27/ledger.md`, `audit/2026-09-25/swarm-2026-09-27/wave3/3a-integration.md`, `audit/2026-09-25/swarm-2026-09-27/wave3/3b-evidence.md`, `audit/2026-09-25/waves/scaffold/RSI-TPM-MMR.md`, `audit/2026-09-25/waves/wave-3.md`, `audit/2026-09-25/waves/wave-4.md`, `docs/agentic/orchestration.md`, `docs/agentic/recurring-failures.md`, `docs/archive/plans/2026-10-04-NPM-MAJORS-react-router7.md`, `docs/archive/plans/2026-10-04-NPM-MAJORS-tailwind4.md`, `docs/archive/plans/2026-10-04-NPM-audit-fix.md`, `docs/archive/plans/2026-10-04-RCC-recovery-code-cache.md`, `docs/archive/plans/2026-10-04-RCC2-secret-retention.md`, `docs/archive/plans/2026-10-04-RCC3-restore-backup.md`, `docs/capstone-report/README.md`, `docs/capstone-report/architecture-engineering-contract.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/capstone-report/specs-compliance-matrix.md`, `docs/plans/2026-09-27-P04-doc-drift-sweep-amendment.md`, `docs/plans/2026-09-27-P08-gated-packet-hipaa-aligned-amendment.md`, `docs/plans/2026-09-27-S01-sql-echo-phi-leak.md`, `docs/plans/2026-09-27-W01-harness-agents-branch-a.md`, `docs/plans/2026-09-27-W02-doctor-summary-redaction.md`, `docs/plans/2026-09-27-W03-verified-only-rag-and-trend-labels.md`, `docs/plans/2026-09-27-W04-legacy-abstain-and-eval-gate.md`, `docs/plans/2026-09-27-W05-citation-marker-prompt.md`, `docs/plans/2026-09-27-W06-external-runner-hardening.md`, `docs/plans/2026-09-27-W07-tiered-interpretation-via-modelrunner.md`, `docs/plans/2026-09-27-W08-bundled-embedding-model.md`, `docs/plans/2026-09-27-W10-governance-invariant-amendments.md`, `docs/plans/2026-09-27-W11a-test-and-gate-hardening.md`, `docs/plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md`, `docs/plans/2026-09-27-nightly-doc-drift-routine-spec.md`, `docs/plans/2026-09-27-senior-report-showcase-plan.md`, `docs/plans/2026-09-29-S02-agent-cache-profile-isolation.md`, `docs/plans/2026-09-30-CI01-cpu-torch-ci-disk.md`, `docs/plans/2026-10-04-DDI-doc-delete-interpretation.md`, `docs/plans/2026-10-04-PROHIBITED-PARAPHRASE.md`, `docs/plans/2026-10-04-SAFE-CHAT-legacy-prohibited-abstain.md`, `docs/plans/2026-10-04-SAFE-INTERP-grounded.md`
+Links to: `audit/2026-09-25/handoff-2026-09-28-execution-orchestrator.md`, `audit/2026-09-25/review/2026-09-27-followup.md`, `audit/2026-09-25/swarm-2026-09-27/ledger.md`, `audit/2026-09-25/swarm-2026-09-27/wave3/3a-integration.md`, `audit/2026-09-25/swarm-2026-09-27/wave3/3b-evidence.md`, `audit/2026-09-25/waves/scaffold/RSI-TPM-MMR.md`, `audit/2026-09-25/waves/wave-3.md`, `audit/2026-09-25/waves/wave-4.md`, `docs/agentic/orchestration.md`, `docs/agentic/recurring-failures.md`, `docs/archive/plans/2026-10-04-NPM-MAJORS-react-router7.md`, `docs/archive/plans/2026-10-04-NPM-MAJORS-tailwind4.md`, `docs/archive/plans/2026-10-04-NPM-audit-fix.md`, `docs/archive/plans/2026-10-04-RCC-recovery-code-cache.md`, `docs/archive/plans/2026-10-04-RCC2-secret-retention.md`, `docs/archive/plans/2026-10-04-RCC3-restore-backup.md`, `docs/capstone-report/README.md`, `docs/capstone-report/architecture-engineering-contract.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/capstone-report/specs-compliance-matrix.md`, `docs/plans/2026-09-27-P04-doc-drift-sweep-amendment.md`, `docs/plans/2026-09-27-P08-gated-packet-hipaa-aligned-amendment.md`, `docs/plans/2026-09-27-S01-sql-echo-phi-leak.md`, `docs/plans/2026-09-27-W01-harness-agents-branch-a.md`, `docs/plans/2026-09-27-W02-doctor-summary-redaction.md`, `docs/plans/2026-09-27-W03-verified-only-rag-and-trend-labels.md`, `docs/plans/2026-09-27-W04-legacy-abstain-and-eval-gate.md`, `docs/plans/2026-09-27-W05-citation-marker-prompt.md`, `docs/plans/2026-09-27-W06-external-runner-hardening.md`, `docs/plans/2026-09-27-W07-tiered-interpretation-via-modelrunner.md`, `docs/plans/2026-09-27-W08-bundled-embedding-model.md`, `docs/plans/2026-09-27-W10-governance-invariant-amendments.md`, `docs/plans/2026-09-27-W11a-test-and-gate-hardening.md`, `docs/plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md`, `docs/plans/2026-09-27-nightly-doc-drift-routine-spec.md`, `docs/plans/2026-09-29-S02-agent-cache-profile-isolation.md`, `docs/plans/2026-09-30-CI01-cpu-torch-ci-disk.md`, `docs/plans/2026-10-04-DDI-doc-delete-interpretation.md`, `docs/plans/2026-10-04-PROHIBITED-PARAPHRASE.md`, `docs/plans/2026-10-04-SAFE-CHAT-legacy-prohibited-abstain.md`, `docs/plans/2026-10-04-SAFE-INTERP-grounded.md`
 
 ## `docs/capstone-report/owner-decisions-2026-09-27.md`
 
@@ -755,46 +755,6 @@ Links to: `audit/2026-09-25/handoff-2026-09-28-execution-orchestrator.md`, `audi
 1. **Governance edits are now approved:** amend `CLAUDE.md` (D3: CSV/JSON as named exceptions; D12: the external runner as a named ModelRunner exception) and `docs/compliance/data-privacy.md` (D3,…
 
 Links to: `docs/capstone-report/README.md`, `docs/capstone-report/implementation-program.md`, `docs/plans/2026-09-27-W08-bundled-embedding-model.md`, `docs/plans/2026-09-30-CI01-cpu-torch-ci-disk.md`, `docs/plans/2026-10-15-build-program/lane-B-interpretation-eval.md`, `docs/plans/2026-10-15-build-program/lane-C-schema-lifecycle.md`, `docs/plans/2026-10-22-mvp-rows-plan.md`, `docs/plans/2026-10-23-frontend-revamp-plan.md`, `docs/plans/2026-10-24-safety-mode-build-plan.md`, `docs/plans/2026-10-30-followups-plan.md`, `docs/plans/2026-11-06-owner-answers-rows-plan.md`, `docs/plans/2026-11-07-three-rows-plan.md`, `docs/plans/2026-11-08-batch-1107f-3-plan.md`, `docs/research/2026-10-22-judge-laya/00-README.md`, `docs/research/2026-10-23-frontend-revamp/00-README.md`, `docs/research/2026-10-23-frontend-revamp/framing.md`, `docs/research/2026-10-23-frontend-revamp/owner-direction.md`
-
-## `docs/capstone-report/phase1/evidence-index.md`
-
-**Senior Report Phase 1 — Evidence Index**
-
-Claim → source table for report-draft.md and presentation-outline.md. Where a claim already has a row in the claims ledger, this index points to that row and does not restate its evidence; the…
-
-Links to: `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/phase1/presentation-outline.md`, `docs/capstone-report/phase1/report-draft.md`, `docs/capstone-report/phase1/workflow-optimization-quiet-box.md`
-
-## `docs/capstone-report/phase1/presentation-outline.md`
-
-**Senior Report Phase 1 — Presentation Outline**
-
-Each slide lists a title, 3-5 bullets, a suggested visual, and speaker notes. Figures marked "showcase" can be lifted from the ledger-gated page…
-
-Links to: `docs/capstone-report/phase1/evidence-index.md`, `docs/capstone-report/phase1/report-draft.md`
-
-## `docs/capstone-report/phase1/report-draft.md`
-
-**Asclexis — Senior Project Report, Phase 1 Draft**
-
-**Phase-1 repo snapshot.** This file is the phase-1 snapshot of the senior report, kept in the repository and merged by owner decision (OLD-PRS-1117, 2026-11-17). The full senior report is a Word…
-
-Links to: `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/phase1/evidence-index.md`, `docs/capstone-report/phase1/presentation-outline.md`, `docs/capstone-report/phase1/workflow-optimization-quiet-box.md`
-
-## `docs/capstone-report/phase1/workflow-optimization-quiet-box.md`
-
-**Workflow optimization: the quiet box and long-running tests**
-
-**Update 2026-11-17:** after this review, options A and B were built (WF-CI-SHARD, #633, merged `189f0e53`) and `PYSLOTS` was raised to 6 (WF-PYSLOTS-6, #635, merged `eb22d019`); owner answers to…
-
-Links to: `docs/capstone-report/phase1/report-draft.md`
-
-## `docs/capstone-report/report-outline.md`
-
-**Capstone Report Outline — Evidence-Mapped**
-
-Working outline. Each section names the artifacts that back it — the report is an assembly of verifiable evidence, not narrative invention. Item status: ✅ ready · 🔶 needs work · ⬜ pending.
-
-Links to: `audit/2026-09-25/review/2026-09-27-followup.md`, `docs/capstone-report/00-original-goal.md`, `docs/capstone-report/README.md`, `docs/capstone-report/architecture-engineering-contract.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/asclexis-showcase-2026-10-22.html`, `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/fit-decoder-journey.md`, `docs/capstone-report/implementation-program.md`, `docs/capstone-report/research`, `docs/capstone-report/research/04-papers-evals.md`, `docs/capstone-report/specs-compliance-matrix.md`
 
 ## `docs/capstone-report/research/01-agentic-swe-tools.md`
 
@@ -1178,14 +1138,6 @@ Links to: `audit/2026-09-25/Devin-Audit-report.md`, `audit/2026-09-25/handoff-20
 
 Links to: `docs/agentic/recurring-failures.md`, `docs/capstone-report/implementation-program.md`
 
-## `docs/plans/2026-09-27-senior-report-showcase-plan.md`
-
-**CS4610 Senior Report — Stakeholder Showcase Update Plan**
-
-**Refresh triggers fired since 2026-09-27:** P1 (both branches ancestors of main), W-1 (#35), P2 notifications (#31), W-3 (#136), W-4 (#72), W-5 (#34), W-6 (#32), W-8 (#168, #196), W-10 (#53), W-11a…
-
-Links to: `audit/2026-09-25/asclexis-showcase.html`, `docs/capstone-report/00-original-goal.md`, `docs/capstone-report/README.md`, `docs/capstone-report/architecture-engineering-contract.md`, `docs/capstone-report/architecture-overview.md`, `docs/capstone-report/claims-ledger.md`, `docs/capstone-report/implementation-program.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/capstone-report/report-outline.md`, `docs/capstone-report/specs-compliance-matrix.md`, `docs/plans/2026-09-27-S01-sql-echo-phi-leak.md`
-
 ## `docs/plans/2026-09-29-S02-agent-cache-profile-isolation.md`
 
 **S-CACHE — Agent Answer Cache Profile Isolation + Memory-Audit Category Drop**
@@ -1460,7 +1412,7 @@ Links to: `audit/2026-09-25/waves/briefs/TAILWIND-4-L1-brief.md`, `docs/archive/
 
 **Prior art reused, not repeated:** readiness packs P4-deferred, W-10b, G-C2, RTN, SHOWCASE (all measured 2026-10-07 @ `6b4dd84`). Their L1/L2 briefs stay usable once the deltas below are applied.
 
-Links to: `audit/2026-09-25/waves/scaffold/G-C2.md`, `audit/2026-09-25/waves/scaffold/P4-deferred.md`, `audit/2026-09-25/waves/scaffold/RTN.md`, `audit/2026-09-25/waves/scaffold/SHOWCASE.md`, `audit/2026-09-25/waves/scaffold/W-10b.md`, `docs/agentic/recurring-failures.md`, `docs/capstone-report/implementation-program.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/features/TASK_LIST.md`, `docs/plans/2026-09-27-P04-doc-drift-sweep-amendment.md`, `docs/plans/2026-09-27-W10-governance-invariant-amendments.md`, `docs/plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md`, `docs/plans/2026-09-27-nightly-doc-drift-routine-spec.md`, `docs/plans/2026-09-27-senior-report-showcase-plan.md`, `docs/plans/2026-10-15-build-program/contracts.md`, `docs/reviews/2026-10-20/gc5-real-model-evidence.md`
+Links to: `audit/2026-09-25/waves/scaffold/G-C2.md`, `audit/2026-09-25/waves/scaffold/P4-deferred.md`, `audit/2026-09-25/waves/scaffold/RTN.md`, `audit/2026-09-25/waves/scaffold/SHOWCASE.md`, `audit/2026-09-25/waves/scaffold/W-10b.md`, `docs/agentic/recurring-failures.md`, `docs/capstone-report/implementation-program.md`, `docs/capstone-report/owner-decisions-2026-09-27.md`, `docs/features/TASK_LIST.md`, `docs/plans/2026-09-27-P04-doc-drift-sweep-amendment.md`, `docs/plans/2026-09-27-W10-governance-invariant-amendments.md`, `docs/plans/2026-09-27-W11b-roadmap-items-gc1-gc4.md`, `docs/plans/2026-09-27-nightly-doc-drift-routine-spec.md`, `docs/plans/2026-10-15-build-program/contracts.md`, `docs/reviews/2026-10-20/gc5-real-model-evidence.md`
 
 ## `docs/plans/2026-10-15-build-program/queue.md`
 
@@ -1748,7 +1700,7 @@ Owner-only items that L0 deferred. L0 keeps this file updated as new blockers ap
 
 These files are local working notes (plans, diagnoses, owner-gate write-ups, handoffs) that the build program kept outside the repo under `~/hc-quiet-logs/`. Many docs and `queue.md` rows cite them…
 
-Links to: `docs/plans/archive/HUMAN-BLOCKERS.md`, `docs/plans/archive/plans-1112/agentic-eval-plan.md`, `docs/plans/archive/plans-1112/planner-summary.md`, `docs/plans/archive/plans-1113/sqlcipher-wheel-plan.md`, `docs/plans/archive/plans-1114/rows-1114-plan.md`, `docs/plans/archive/senior-report-doc/HANDOFF-SENIOR-REPORT-DOC.md`, `docs/plans/archive/senior-report-doc/STATUS.md`, `docs/plans/archive/staging-1111a/uidoc006a-diagnosis.md`, `docs/plans/archive/staging-1111c/meds-g-diagnosis.md`, `docs/plans/archive/staging-1111i/owner-gates-1111i.md`, `docs/plans/archive/stillness-nav-late-1107-result.md`, `docs/plans/archive/stillness-nav-late/RESULT.md`, `docs/plans/archive/uig006-pass3/RESULT.md`
+Links to: `docs/plans/archive/HUMAN-BLOCKERS.md`, `docs/plans/archive/plans-1112/agentic-eval-plan.md`, `docs/plans/archive/plans-1112/planner-summary.md`, `docs/plans/archive/plans-1113/sqlcipher-wheel-plan.md`, `docs/plans/archive/plans-1114/rows-1114-plan.md`, `docs/plans/archive/staging-1111a/uidoc006a-diagnosis.md`, `docs/plans/archive/staging-1111c/meds-g-diagnosis.md`, `docs/plans/archive/staging-1111i/owner-gates-1111i.md`, `docs/plans/archive/stillness-nav-late-1107-result.md`, `docs/plans/archive/stillness-nav-late/RESULT.md`, `docs/plans/archive/uig006-pass3/RESULT.md`
 
 ## `docs/plans/archive/plans-1112/agentic-eval-plan.md`
 
@@ -1773,18 +1725,6 @@ Recommendation: Windows uses official `sqlcipher3==0.6.5` (coleifer; same import
 **Rows 1114 plan: SQLC-LOGIN-ERROR-MAP and TREND-POINT-RANGE**
 
 Planner: Opus, 2026-11-14, read-only investigation on origin/main `c60be508`. Owner instruction (BUILD-1114, verbatim, last line of `~/hc-quiet-logs/plans-1112/owner-answers-1112b.md`): "Start both…
-
-## `docs/plans/archive/senior-report-doc/HANDOFF-SENIOR-REPORT-DOC.md`
-
-**HANDOFF — Senior report as a Claude doc (owner task SENIOR-REPORT-DOC, 2026-11-12/13)**
-
-Owner asked: turn the senior report Claude artifact into a Claude doc, and keep drafting it as things worth mentioning land. Blocker (2026-11-12): this needs the first-party Claude Docs connector;…
-
-## `docs/plans/archive/senior-report-doc/STATUS.md`
-
-**STATUS — Senior report Claude doc (SENIOR-REPORT-DOC), 2026-11-14**
-
-Doc: "Asclexis — Senior Report (MVP)" https://claude.ai/artifact/3dmFD3B2zsWcvF2d4J8tEm (doc id [redacted]; tab [redacted]; body node [redacted]; chart widget [redacted]) As-of chip 2026-11-14.…
 
 ## `docs/plans/archive/staging-1111a/uidoc006a-diagnosis.md`
 
